@@ -1,18 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
+                 xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="SaveClicks.Martin Škuta.b6e3853d-6356-41b5-b6a5-d92f4bd8e50e" Version="1.0" Language="en-US" Publisher="Martin Škuta" />
-    <DisplayName>SaveClicks</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Identity Id="SaveClicks.MartinSkuta.b6e3853d-6356-41b5-b6a5-d92f4bd8e50e" Version="0.2.3" Language="en-US"
+              Publisher="Martin Škuta" />
+    <DisplayName>Save clicks</DisplayName>
+    <Description xml:space="preserve">Visual studio extension that will save you mouse clicks and help you be more productive by advising you to use keyboard shortcuts instead of clicking and will also advise you to bind your most used commands that you click but dont have them bound to keyboard shortuct.</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed"
+                Version="[14.0]" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%"
+           Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
   </Assets>
 </PackageManifest>
