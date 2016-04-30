@@ -49,15 +49,21 @@ Task("PatchVersion")
 						
 	ReplaceTextInFiles("./**/Properties/AssemblyInfo.cs",
                         "0.0.0.0",
-                        infoVersion);					
+                        infoVersion);
+
+	ReplaceTextInFiles("./**/source.extension.vsixmanifest",
+						"0.0.0",
+						fileVersion);
 });
 
 Task("Build")
     .IsDependentOn("PatchVersion")
     .Does(() =>
 {
-    MSBuild("./SaveClicks.sln", settings =>
-        settings.SetConfiguration(configuration));
+    MSBuild("./SaveClicks.sln", settings => {		
+		settings.SetConfiguration(configuration);
+		settings.SetPlatformTarget(PlatformTarget.x86);		
+	});
 });
 
 //////////////////////////////////////////////////////////////////////

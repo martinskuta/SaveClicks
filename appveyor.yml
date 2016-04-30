@@ -1,6 +1,7 @@
 # Build script
 build_script:
-  - ps: .\src\build.ps1 --revision "$env:appveyor_build_number" --productVersion="1.0"
+  - ps: cd src
+  - ps: .\build.ps1 --revision="$env:appveyor_build_number" --productVersion="1.0"
 
 # Tests
 test: off
