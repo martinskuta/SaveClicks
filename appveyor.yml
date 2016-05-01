@@ -1,9 +1,11 @@
 init:
   #updates the version to format Major.Minor.DayOfYear.TimeOfDay
-  - ps: Update-AppveyorBuild -Version "1.0.$($(Get-Date -format yy) + $((Get-Date).DayOfYear)).$(Get-Date -format HHmmss)"
+  - ps: $utcNow = (Get-Date).ToUniversalTime()
+  - ps: Update-AppveyorBuild -Version "1.0.$($utcNow.ToString("yy") + $utcNow.DayOfYear).$($utcNow.ToString("HHmmss"))"
 configuration: Release
 build_script:
   - ps: cd src
   - ps: .\build.ps1 --productVersion="$env:APPVEYOR_BUILD_VERSION"
-
 test: off
+artifacts:
+  - path: src\SaveClicks\bin\${configuration}\SaveClicks.vsix
