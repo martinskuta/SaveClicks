@@ -1,7 +1,7 @@
 init:
   #updates the version to format Major.Minor.DayOfYear.TimeOfDay
   - ps: $utcNow = (Get-Date).ToUniversalTime()
-  - ps: Update-AppveyorBuild -Version "1.0.$($utcNow.ToString("yy") + $utcNow.DayOfYear).$($utcNow.ToString("HHmmss"))"
+  - ps: Update-AppveyorBuild -Version "1.0.$($utcNow.ToString("yy") + $utcNow.DayOfYear).$($utcNow.ToString("HHmm"))"
 configuration: Release
 build_script:
   - ps: cd src
