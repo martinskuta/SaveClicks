@@ -1,6 +1,6 @@
 init:
   #updates the version to format Major.Minor.DayOfYear.TimeOfDay
-  - ps: Update-AppveyorBuild -Version "1.0.$($(Get-Date -format yy) + $((Get-Date).DayOfYear)).$(Get-Date -format HHmmss)
+  - ps: Update-AppveyorBuild -Version "1.0.$($(Get-Date -format yy) + $((Get-Date).DayOfYear)).$(Get-Date -format HHmmss)"
 configuration: Release
 build_script:
   - ps: cd src
