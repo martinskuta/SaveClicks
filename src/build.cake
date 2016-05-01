@@ -1,0 +1,75 @@
+///////////////////////////////////////////////////////////////////////////////
+// ADDINS
+///////////////////////////////////////////////////////////////////////////////
+#addin "Cake.FileHelpers"
+
+///////////////////////////////////////////////////////////////////////////////
+// TOOLS
+///////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// ARGUMENTS
+// Example command:
+// .\build.ps1 --productVersion="1.0"
+//////////////////////////////////////////////////////////////////////
+
+var target = Argument("target", "Default");
+var configuration = Argument("configuration", "Release");
+var version = Argument("productVersion", "0.0.0.0");
+
+//////////////////////////////////////////////////////////////////////
+// TASKS
+//////////////////////////////////////////////////////////////////////
+
+Task("Restore-NuGet-Packages")
+    .Does(() =>
+{
+	NuGetRestore("./SaveClicks.sln");
+});
+
+Task("PatchVersion")
+    .IsDependentOn("Restore-NuGet-Packages")
+    .Does(() =>
+{
+    Information("Version: " + version);
+			
+    					
+	ReplaceTextInFiles("./**/Properties/AssemblyInfo.cs",
+                        "0.0.0.0",
+                        version);
+
+	ReplaceTextInFiles("./**/source.extension.vsixmanifest",
+						"0.0.0.0",
+						version);
+});
+
+Task("Build")
+    .IsDependentOn("PatchVersion")
+    .Does(() =>
+{
+    MSBuild("./SaveClicks.sln", settings => {		
+		settings.SetConfiguration(configuration);
+		settings.SetPlatformTarget(PlatformTarget.x86);		
+	});
+});
+
+Task("MoveArtifacts")
+	.IsDependentOn("Build")
+    .Does(() =>
+{
+    CreateDirectory("artifacts");
+    MoveFile("SaveClicks/bin/x86/" + configuration + "/SaveClicks.vsix", "artifacts/SaveClicks." + version + ".vsix");
+});
+
+//////////////////////////////////////////////////////////////////////
+// TASK TARGETS
+//////////////////////////////////////////////////////////////////////
+
+Task("Default")
+    .IsDependentOn("MoveArtifacts");
+
+//////////////////////////////////////////////////////////////////////
+// EXECUTION
+//////////////////////////////////////////////////////////////////////
+
+RunTarget(target);
