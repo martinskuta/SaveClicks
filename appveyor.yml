@@ -1,6 +1,9 @@
+init:
+  #updates the version to format Major.Minor.DayOfYear.TimeOfDay
+  - ps: Update-AppveyorBuild -Version "1.0.$($(Get-Date -format yy) + $((Get-Date).DayOfYear)).$(Get-Date -format HHmmss)
 configuration: Release
 build_script:
   - ps: cd src
-  - ps: .\build.ps1 --revision="$env:appveyor_build_number" --productVersion="1.0" --configuration="$env:configuration"
+  - ps: .\build.ps1 --productVersion="$env:version"
 
 test: off

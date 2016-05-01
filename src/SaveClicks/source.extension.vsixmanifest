@@ -3,7 +3,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="SaveClicks.MartinSkuta.b6e3853d-6356-41b5-b6a5-d92f4bd8e50e" Version="0.0.0" Language="en-US"
+    <Identity Id="SaveClicks.MartinSkuta.b6e3853d-6356-41b5-b6a5-d92f4bd8e50e" Version="0.0.0.0" Language="en-US"
               Publisher="Martin Škuta" />
     <DisplayName>Save clicks</DisplayName>
     <Description xml:space="preserve">Visual studio extension that will save you mouse clicks and help you be more productive by advising you to use keyboard shortcuts instead of clicking and will also advise you to bind your most used commands that you click but dont have them bound to keyboard shortuct.</Description>
