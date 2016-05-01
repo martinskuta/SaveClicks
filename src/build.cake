@@ -53,12 +53,20 @@ Task("Build")
 	});
 });
 
+Task("MoveArtifacts")
+	.IsDependentOn("Build")
+    .Does(() =>
+{
+    CreateDirectory("artifacts");
+    MoveFile("SaveClicks/bin/x86/" + configuration + "/SaveClicks.vsix", "artifacts/SaveClicks." + version + ".vsix");
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Build");
+    .IsDependentOn("MoveArtifacts");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

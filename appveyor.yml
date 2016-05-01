@@ -8,4 +8,4 @@ build_script:
   - ps: .\build.ps1 --productVersion="$env:APPVEYOR_BUILD_VERSION"
 test: off
 artifacts:
-  - path: src/SaveClicks/bin/$(configuration)/SaveClicks.vsix
+  - path: src\artifacts\SaveClicks.$(APPVEYOR_BUILD_VERSION).vsix
