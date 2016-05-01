@@ -4,6 +4,6 @@ init:
 configuration: Release
 build_script:
   - ps: cd src
-  - ps: .\build.ps1 --productVersion="$env:version"
+  - ps: .\build.ps1 --productVersion="$env:APPVEYOR_BUILD_VERSION"
 
 test: off
