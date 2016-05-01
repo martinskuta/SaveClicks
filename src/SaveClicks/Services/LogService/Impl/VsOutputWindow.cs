@@ -4,6 +4,7 @@ using System;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
+using Microsoft.VisualStudio.Shell;
 
 #endregion
 
@@ -24,6 +25,16 @@ namespace SaveClicks.Services.LogService.Impl
         }
 
         private OutputWindowPane OutputWindow => _outputWindowPane ?? (_outputWindowPane = GetOutputWindowPane());
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+
+            _dte = null;
+            _outputWindowPane = null;
+
+            _disposed = true;
+        }
 
         public bool IsErrorEnabled => true;
 
@@ -58,28 +69,25 @@ namespace SaveClicks.Services.LogService.Impl
 
         private void OutputString(string message)
         {
-            OutputWindow.OutputString(message + Environment.NewLine);
+            try
+            {
+                OutputWindow.OutputString(message + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                ActivityLog.TryLogError(ToString(), $"Failed to log message: {message}{Environment.NewLine}{Environment.NewLine}{ex}");
+            }
         }
 
         private OutputWindowPane GetOutputWindowPane()
         {
             if (_outputWindowPane == null)
             {
-                var outputWindow = (OutputWindow) _dte.Windows.Item(Constants.vsWindowKindOutput).Object;
+                var outputWindow = (OutputWindow)_dte.Windows.Item(Constants.vsWindowKindOutput).Object;
                 _outputWindowPane = outputWindow.OutputWindowPanes.Add(OutputWindowName);
             }
 
             return _outputWindowPane;
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-
-            _dte = null;
-            _outputWindowPane = null;
-
-            _disposed = true;
         }
     }
 }

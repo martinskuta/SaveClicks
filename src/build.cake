@@ -15,7 +15,7 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var version = Argument("productVersion", "0.0.0.0");
+var version = Argument("productVersion", "9.9.9.9");
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -32,14 +32,14 @@ Task("PatchVersion")
     .Does(() =>
 {
     Information("Version: " + version);
-			
-    					
+
+
 	ReplaceTextInFiles("./**/Properties/AssemblyInfo.cs",
-                        "0.0.0.0",
+                        "9.9.9.9",
                         version);
 
 	ReplaceTextInFiles("./**/source.extension.vsixmanifest",
-						"0.0.0.0",
+						"9.9.9.9",
 						version);
 });
 
@@ -47,9 +47,9 @@ Task("Build")
     .IsDependentOn("PatchVersion")
     .Does(() =>
 {
-    MSBuild("./SaveClicks.sln", settings => {		
+    MSBuild("./SaveClicks.sln", settings => {
 		settings.SetConfiguration(configuration);
-		settings.SetPlatformTarget(PlatformTarget.x86);		
+		settings.SetPlatformTarget(PlatformTarget.x86);
 	});
 });
 
