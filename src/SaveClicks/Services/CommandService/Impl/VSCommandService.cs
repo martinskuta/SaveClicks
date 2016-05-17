@@ -99,7 +99,7 @@ namespace SaveClicks.Services.CommandService.Impl
 
         private bool WasMouseClickedRecently()
         {
-            return (DateTime.UtcNow - _lastMouseClick) < _recentThreshold;
+            return DateTime.UtcNow - _lastMouseClick < _recentThreshold;
         }
 
         private void SubscribeToCommandEvents()
@@ -190,7 +190,7 @@ namespace SaveClicks.Services.CommandService.Impl
             }
 
             var chain = BuildCommandChain(chainSnapshot);
-            if (chain == null || chain.Count == 0)
+            if (chain == null)
             {
                 if (_log.IsDebugEnabled) _log.LogDebug("Failed to build command chain.");
                 return;
@@ -209,7 +209,7 @@ namespace SaveClicks.Services.CommandService.Impl
             }
         }
 
-        private IList<Command> BuildCommandChain(List<CommandEventFootprint> chainFootprints)
+        internal IList<Command> BuildCommandChain(List<CommandEventFootprint> chainFootprints)
         {
             var chain = TryBuildChainUsingBeforeAfterMatching(chainFootprints);
             if (chain != null) return chain;
@@ -267,6 +267,13 @@ namespace SaveClicks.Services.CommandService.Impl
                 }
             }
 
+            if (ftStack.Count > 0)
+            {
+                if (_log.IsDebugEnabled)
+                    _log.LogDebug($"Command chain build failed: Missing matching BeforeExecute event for {string.Join(", ", ftStack)}");
+                return null;
+            }
+
             return chain;
         }
 
@@ -286,6 +293,14 @@ namespace SaveClicks.Services.CommandService.Impl
 
                 if (footprint.Type == CommandEventType.BeforeExecute)
                 {
+                    if (ftStack.Count == 0)
+                    {
+                        if (_log.IsDebugEnabled)
+                            _log.LogDebug(
+                                $"Fix of command event footprint chain failed: Could not determine order of BeforeExecute of {footprint.UniqueIdentifier}");
+                        return false;
+                    }
+
                     var current = ftStack.Pop();
                     if (current.UniqueIdentifier == footprint.UniqueIdentifier) continue;
 
@@ -353,7 +368,7 @@ namespace SaveClicks.Services.CommandService.Impl
             return footprint.WasMouseClickedRecently.HasValue && footprint.WasMouseClickedRecently.Value ? CommandTrigger.Mouse : CommandTrigger.Unknown;
         }
 
-        private class CommandEventFootprint
+        internal class CommandEventFootprint
         {
             private string _uniqueIdentifier;
 
@@ -379,7 +394,7 @@ namespace SaveClicks.Services.CommandService.Impl
             public KeyboardShortcut[] ShortcutPressed { get; }
         }
 
-        private enum CommandEventType : byte
+        internal enum CommandEventType : byte
         {
             BeforeExecute,
             AfterExecute
