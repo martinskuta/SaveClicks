@@ -69,6 +69,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
     <Compile Include="Bootstraper.cs" />
     <Compile Include="Services\CommandService\Impl\ExcludedCommands.cs" />
     <Compile Include="Services\CommandService\Command.cs" />
