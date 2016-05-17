@@ -34,7 +34,7 @@ Task("PatchVersion")
     Information("Version: " + version);
 
 
-	ReplaceTextInFiles("./**/Properties/AssemblyInfo.cs",
+	ReplaceTextInFiles("./AssemblyVersion.cs",
                         "9.9.9.9",
                         version);
 
@@ -53,8 +53,18 @@ Task("Build")
 	});
 });
 
-Task("MoveArtifacts")
+Task("Run-Tests")
 	.IsDependentOn("Build")
+	.Does(() => 
+{
+	NUnit3("./Tests/**/bin/" + configuration + "/*.Tests.dll", new NUnit3Settings {
+		StopOnError = true,
+		X86 = true
+    });
+});
+
+Task("MoveArtifacts")
+	.IsDependentOn("Run-Tests")
     .Does(() =>
 {
     CreateDirectory("artifacts");

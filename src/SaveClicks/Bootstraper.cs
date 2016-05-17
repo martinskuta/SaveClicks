@@ -42,15 +42,14 @@ namespace SaveClicks
 
         private IWindsorContainer _iocContainer;
 
-
         public int OnShellPropertyChange(int propid, object var)
         {
-            if (propid == (int) __VSSPROPID4.VSSPROPID_ShellInitialized && Convert.ToBoolean(var))
+            if (propid == (int)__VSSPROPID4.VSSPROPID_ShellInitialized && Convert.ToBoolean(var))
             {
                 InitializeDte();
 
                 // stop listening for shell property changes
-                var vsShell = (IVsShell) GetService(typeof(SVsShell));
+                var vsShell = (IVsShell)GetService(typeof(SVsShell));
                 vsShell.UnadviseShellPropertyChanges(_propChangeCookie);
                 _propChangeCookie = 0;
             }
@@ -61,7 +60,7 @@ namespace SaveClicks
         {
             base.Initialize();
 
-            IVsShell vsShell = (IVsShell)GetService(typeof(SVsShell));
+            var vsShell = (IVsShell)GetService(typeof(SVsShell));
             vsShell.AdviseShellPropertyChanges(this, out _propChangeCookie);
         }
 
@@ -71,7 +70,7 @@ namespace SaveClicks
 
             if (dte == null) // The IDE is not yet fully initialized
             {
-                _dteInitializer = new DteInitializer((IVsShell) GetService(typeof(SVsShell)), InitializeDte);
+                _dteInitializer = new DteInitializer((IVsShell)GetService(typeof(SVsShell)), InitializeDte);
                 return;
             }
 
@@ -100,11 +99,13 @@ namespace SaveClicks
 
         private void AdvisorOnUseKeyboardShortcut(object sender, CommandArgs e)
         {
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action) (() =>
-            {
-                var toast = new ToastPopup("Save clicks", CreateFormattedText(e.Command));
-                toast.Show();
-            }));
+            Application.Current.Dispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                (Action)(() =>
+                {
+                    var toast = new ToastPopup("Save clicks", CreateFormattedText(e.Command));
+                    toast.Show();
+                }));
         }
 
         private List<Inline> CreateFormattedText(Command cmd)
@@ -119,17 +120,17 @@ namespace SaveClicks
             {
                 en.MoveNext();
 
-                inlines.Add(new Run(en.Current) {FontWeight = FontWeights.Bold});
+                inlines.Add(new Run(en.Current) { FontWeight = FontWeights.Bold });
 
                 while (en.MoveNext())
                 {
                     inlines.Add(new Run(" or "));
-                    inlines.Add(new Run(en.Current) {FontWeight = FontWeights.Bold});
+                    inlines.Add(new Run(en.Current) { FontWeight = FontWeights.Bold });
                 }
             }
 
             inlines.Add(new Run(" for "));
-            inlines.Add(new Run(cmd.Name) {FontStyle = FontStyles.Italic});
+            inlines.Add(new Run(cmd.Name) { FontStyle = FontStyles.Italic });
             inlines.Add(new Run(" next time."));
             return inlines;
         }
@@ -153,9 +154,9 @@ namespace SaveClicks
 
         int IVsShellPropertyEvents.OnShellPropertyChange(int propid, object var)
         {
-            if (propid != (int) __VSSPROPID.VSSPROPID_Zombie) return VSConstants.S_OK;
+            if (propid != (int)__VSSPROPID.VSSPROPID_Zombie) return VSConstants.S_OK;
 
-            var isZombie = (bool) var;
+            var isZombie = (bool)var;
             if (isZombie) return VSConstants.S_OK;
 
             // Release the event handler to detect when the IDE is fully initialized
