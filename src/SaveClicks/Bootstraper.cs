@@ -10,7 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using EnvDTE80;
+using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -23,6 +23,7 @@ using SaveClicks.Services.LogService;
 using SaveClicks.Services.LogService.Impl;
 using SaveClicks.Services.ProductivityAdvisor;
 using SaveClicks.Services.ProductivityAdvisor.Impl;
+using Command = SaveClicks.Services.CommandService.Command;
 
 #endregion
 
@@ -34,39 +35,23 @@ namespace SaveClicks
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
         Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideAutoLoad("ADFC4E64-0397-11D1-9F4E-00A0C911004F")]
-    public sealed class Bootstraper : Package, IVsShellPropertyEvents
+    public sealed class Bootstraper : Package
     {
         public const string PackageGuidString = "e238be6e-e00c-46e4-811a-481fd444e76d";
         private DteInitializer _dteInitializer;
-        private uint _propChangeCookie;
 
         private IWindsorContainer _iocContainer;
-
-        public int OnShellPropertyChange(int propid, object var)
-        {
-            if (propid == (int)__VSSPROPID4.VSSPROPID_ShellInitialized && Convert.ToBoolean(var))
-            {
-                InitializeDte();
-
-                // stop listening for shell property changes
-                var vsShell = (IVsShell)GetService(typeof(SVsShell));
-                vsShell.UnadviseShellPropertyChanges(_propChangeCookie);
-                _propChangeCookie = 0;
-            }
-            return VSConstants.S_OK;
-        }
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            var vsShell = (IVsShell)GetService(typeof(SVsShell));
-            vsShell.AdviseShellPropertyChanges(this, out _propChangeCookie);
+            InitializeDte();
         }
 
         private void InitializeDte()
         {
-            var dte = GetService(typeof(SDTE)) as DTE2;
+            var dte = GetService(typeof(DTE)) as DTE;
 
             if (dte == null) // The IDE is not yet fully initialized
             {
@@ -78,12 +63,12 @@ namespace SaveClicks
             InitializeIoC(dte);
         }
 
-        private void InitializeIoC(DTE2 dte)
+        private void InitializeIoC(DTE dte)
         {
             _iocContainer = new WindsorContainer();
 
             _iocContainer.Register(
-                Component.For<DTE2>().Instance(dte).LifestyleSingleton(),
+                Component.For<DTE>().Instance(dte).LifestyleSingleton(),
                 Component.For<ILogService>().ImplementedBy<VsOutputWindow>().LifestyleSingleton(),
                 Component.For<IKeyConverter>().ImplementedBy<VsKeyConverter>().LifestyleSingleton(),
                 Component.For<IModifierKeyConverter>().ImplementedBy<VsModifierKeyConverter>().LifestyleSingleton(),

@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
-using EnvDTE80;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SaveClicks.Services.CommandService.Impl;
 using Skuta.Testing;
+using Command = SaveClicks.Services.CommandService.Command;
 
 #endregion
 
@@ -19,7 +19,7 @@ namespace SaveClicks.Tests.Services.CommandService.Impl
     {
         private void StubCommandsInterface()
         {
-            var dte = GetMock<DTE2>();
+            var dte = GetMock<DTE>();
             var commands = MockRepository.GenerateMock<Commands>();
 
             commands.Stub(x => x.Item(Arg<object>.Is.Anything, Arg<int>.Is.Anything)).Return(null).WhenCalled(
