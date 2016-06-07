@@ -2,7 +2,6 @@
 
 using System;
 using EnvDTE;
-using EnvDTE80;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.Shell;
 
@@ -15,11 +14,11 @@ namespace SaveClicks.Services.LogService.Impl
     {
         private const string OutputWindowName = "Save clicks";
 
-        private DTE2 _dte;
+        private DTE _dte;
         private OutputWindowPane _outputWindowPane;
         private bool _disposed;
 
-        public VsOutputWindow(DTE2 dte)
+        public VsOutputWindow(DTE dte)
         {
             _dte = dte;
         }
@@ -75,7 +74,7 @@ namespace SaveClicks.Services.LogService.Impl
             }
             catch (Exception ex)
             {
-                ActivityLog.TryLogError(ToString(), $"Failed to log message: {message}{Environment.NewLine}{Environment.NewLine}{ex}");
+                ActivityLog.LogError(ToString(), $"Failed to log message: {message}{Environment.NewLine}{Environment.NewLine}{ex}");
             }
         }
 

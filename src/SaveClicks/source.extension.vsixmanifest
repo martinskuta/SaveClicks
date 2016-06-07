@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
-                 xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="SaveClicks.MartinSkuta.b6e3853d-6356-41b5-b6a5-d92f4bd8e50e" Version="9.9.9.9" Language="en-US"
-              Publisher="Martin Škuta" />
-    <DisplayName>Save clicks</DisplayName>
+<Vsix Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="SaveClicks.MartinSkuta.b6e3853d-6356-41b5-b6a5-d92f4bd8e50e">
+    <Name>Save clicks</Name>
+    <Author>Martin Škuta</Author>
+    <Version>9.9.9.9</Version>
     <Description xml:space="preserve">Visual studio extension that will save you mouse clicks and help you be more productive by advising you to use keyboard shortcuts instead of clicking and will also advise you to bind your most used commands that you click but dont have them bound to keyboard shortuct.</Description>
-  </Metadata>
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed"
-                Version="[14.0]" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%"
-           Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
-</PackageManifest>
+    <MoreInfoUrl>https://github.com/martinskuta/SaveClicks</MoreInfoUrl>
+    <Locale>1033</Locale>
+    <Icon></Icon>
+    <PreviewImage></PreviewImage>
+    <License>License.md</License>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+        <Edition>IntegratedShell</Edition>
+      </VisualStudio>
+      <VisualStudio Version="11.0">
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+        <Edition>IntegratedShell</Edition>
+      </VisualStudio>
+      <VisualStudio Version="12.0">
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+        <Edition>IntegratedShell</Edition>
+      </VisualStudio>
+      <VisualStudio Version="14.0">
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+        <Edition>IntegratedShell</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
+  </Identifier>
+  <References />
+  <Content>
+    <MefComponent>|%CurrentProject%|</MefComponent>
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+  </Content>
+</Vsix>

@@ -7,7 +7,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using EnvDTE;
-using EnvDTE80;
 using JetBrains.Annotations;
 using SaveClicks.Services.InteractionService;
 using SaveClicks.Services.LogService;
@@ -21,7 +20,7 @@ namespace SaveClicks.Services.CommandService.Impl
     public sealed class VSCommandService : ICommandService, IDisposable
     {
         //Dependencies
-        private DTE2 _dte;
+        private DTE _dte;
         private readonly ILogService _log;
         private readonly ICommandBindingParser _bindingParser;
         private readonly IInteractionService _interactionService;
@@ -43,7 +42,7 @@ namespace SaveClicks.Services.CommandService.Impl
         private readonly List<CommandEvents> _commandEvents = new List<CommandEvents>();
         private bool _disposed;
 
-        public VSCommandService(DTE2 dte, ICommandBindingParser bindingParser, IInteractionService interactionService, ILogService log)
+        public VSCommandService(DTE dte, ICommandBindingParser bindingParser, IInteractionService interactionService, ILogService log)
         {
             _dte = dte;
             _bindingParser = bindingParser;
